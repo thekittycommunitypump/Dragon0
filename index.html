@@ -872,6 +872,119 @@ background:
             </div>
         </div>
     </section>
+        <!-- Community Voting & Feedback Section -->
+    <section class="community-voting" id="voting">
+        <div class="container">
+
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🗳️ Community Voting & Feedback</span></h2>
+                <p>Your voice matters. Help shape the future of TKCP.</p>
+            </div>
+
+            <div class="voting-grid">
+
+                <!-- Voting Card -->
+                <div class="voting-card fade-in">
+                    <div class="voting-icon">🗳️</div>
+
+                    <h3>Community Vote</h3>
+
+                    <p class="voting-question">
+                        What should TKCP focus on next?
+                    </p>
+
+                    <div class="vote-options">
+
+                        <button class="vote-option" onclick="castVote(this, 'Community Growth')">
+                            <span>🚀</span>
+                            <span>Community Growth</span>
+                        </button>
+
+                        <button class="vote-option" onclick="castVote(this, 'Marketing & Promotion')">
+                            <span>📣</span>
+                            <span>Marketing & Promotion</span>
+                        </button>
+
+                        <button class="vote-option" onclick="castVote(this, 'Community Events')">
+                            <span>🎉</span>
+                            <span>Community Events</span>
+                        </button>
+
+                        <button class="vote-option" onclick="castVote(this, 'Ecosystem Development')">
+                            <span>💎</span>
+                            <span>Ecosystem Development</span>
+                        </button>
+
+                    </div>
+
+                    <p id="vote-message" class="vote-message"></p>
+
+                    <div class="vote-note">
+                        💡 One vote per browser.
+                    </div>
+                </div>
+
+
+                <!-- Feedback Card -->
+                <div class="voting-card feedback-card fade-in">
+                    <div class="voting-icon">💡</div>
+
+                    <h3>Send Us Your Feedback</h3>
+
+                    <p>
+                        Have an idea, suggestion, or something you'd like to see
+                        improved? Let the TKCP community know.
+                    </p>
+
+                    <form
+                        class="feedback-form"
+                        action="https://formsubmit.co/YOUR-EMAIL-HERE"
+                        method="POST"
+                    >
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your Name"
+                            required
+                        >
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Your Email"
+                            required
+                        >
+
+                        <textarea
+                            name="message"
+                            rows="5"
+                            placeholder="Write your feedback or suggestion..."
+                            required
+                        ></textarea>
+
+                        <input
+                            type="hidden"
+                            name="_subject"
+                            value="TKCP Community Feedback"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="_captcha"
+                            value="false"
+                        >
+
+                        <button type="submit" class="feedback-button">
+                            💌 Send Feedback
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <!-- Why Join Section -->
     <section class="why-join" id="why-join">
