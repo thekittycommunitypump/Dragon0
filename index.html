@@ -5,6 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$TKCP - The Kitty Community Pump</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    /* =========================================
+   COMMUNITY VOTING & FEEDBACK
+   ========================================= */
+
+.community-voting {
+    padding: 100px 0;
+    position: relative;
+}
+
+.voting-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.voting-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 20px;
+    padding: 35px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.voting-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.voting-icon {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.voting-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.voting-question {
+    font-size: 16px;
+    margin-bottom: 25px;
+    opacity: 0.85;
+}
+
+.vote-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vote-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: left;
+    transition: all 0.25s ease;
+}
+
+.vote-option:hover {
+    background: rgba(139, 92, 246, 0.18);
+    border-color: rgba(139, 92, 246, 0.6);
+    transform: translateX(4px);
+}
+
+.vote-option.voted {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.6);
+}
+
+.vote-message {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #a78bfa;
+}
+
+.vote-note {
+    margin-top: 18px;
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+/* Feedback form */
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+    border-color: rgba(139, 92, 246, 0.7);
+}
+
+.feedback-form textarea {
+    resize: vertical;
+}
+
+.feedback-form input::placeholder,
+.feedback-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.feedback-button {
+    border: none;
+    border-radius: 10px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.feedback-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .voting-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .voting-card {
+        padding: 25px;
+    }
+
+}
     <style>
         :root {
     --primary: #6366f1;
