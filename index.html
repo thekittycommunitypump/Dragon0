@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$TKCP - The Kitty Community Pump</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --accent: #22d3ee;
+    --accent-light: #06b6d4;
+
+    --bg-dark: #050816;
+    --bg-card: #0b1224;
+    --bg-card-hover: #111b33;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #a5b4fc;
+    --text-muted: #94a3b8;
+
+    --border: rgba(99, 102, 241, 0.22);
+    --glow: rgba(34, 211, 238, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(34, 211, 238, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+        }
+
+        .particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+        .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: var(--accent); border-radius: 50%;
+            opacity: 0.3; animation: float 15s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            25% { transform: translateY(-100px) translateX(50px); opacity: 0.6; }
+            50% { transform: translateY(-50px) translateX(-30px); opacity: 0.2; }
+            75% { transform: translateY(-150px) translateX(20px); opacity: 0.5; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); transition: all 0.3s ease;
+        }
+        nav.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.75rem; text-decoration: none;
+        }
+        .logo img {
+            width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+            animation: logo-spin 8s ease-in-out infinite;
+        }
+        @keyframes logo-spin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.05); }
+            50% { transform: rotate(0deg) scale(1); }
+            75% { transform: rotate(-5deg) scale(1.05); }
+        }
+        .logo-text {
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.25rem;
+            color: var(--accent); letter-spacing: 1px;
+        }
+        .nav-links {
+            display: flex; gap: 2rem; list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 0.9rem; transition: all 0.3s ease; position: relative;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--accent); transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .mobile-menu-btn {
+            display: none; background: none; border: none;
+            color: var(--text-primary); font-size: 1.5rem; cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            border-radius: 50%; animation: pulse 4s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+        .hero-content {
+            max-width: 800px; text-align: center; position: relative; z-index: 1;
+        }
+
+        /* ANIMATED HERO LOGO */
+        .hero-logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .hero-logo {
+            width: 260px; height: 260px; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--accent);
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.4), 0 0 80px rgba(168, 85, 247, 0.2);
+            animation: hero-logo-float 4s ease-in-out infinite, hero-logo-glow 3s ease-in-out infinite alternate;
+            position: relative; z-index: 2;
+        }
+        @keyframes hero-logo-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(-25px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-2deg); }
+        }
+        @keyframes hero-logo-glow {
+            0% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.4), 0 0 80px rgba(168, 85, 247, 0.2); border-color: var(--accent); }
+            100% { box-shadow: 0 0 60px rgba(251, 191, 36, 0.7), 0 0 100px rgba(168, 85, 247, 0.4), 0 0 140px rgba(168, 85, 247, 0.2); border-color: #f59e0b; }
+        }
+
+        /* Orbiting coins around logo */
+        .orbit-container {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 340px; height: 340px;
+            pointer-events: none; z-index: 1;
+        }
+        .orbit-coin {
+            position: absolute; width: 32px; height: 32px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: bold; color: #0a0a0f;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+            animation: orbit 8s linear infinite;
+        }
+        .orbit-coin:nth-child(1) { animation-delay: 0s; animation-duration: 10s; }
+        .orbit-coin:nth-child(2) { animation-delay: -3.3s; animation-duration: 12s; }
+        .orbit-coin:nth-child(3) { animation-delay: -6.6s; animation-duration: 9s; }
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(170px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(170px) rotate(-360deg); }
+        }
+
+        /* Lightning effect behind logo */
+        .lightning-bg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; height: 400px; pointer-events: none; z-index: 0; opacity: 0.4;
+        }
+        .lightning-bolt {
+            position: absolute; width: 3px; height: 60px;
+            background: linear-gradient(to bottom, transparent, #a855f7, transparent);
+            border-radius: 2px; animation: lightning 2s infinite;
+        }
+        .lightning-bolt:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; transform: rotate(-15deg); }
+        .lightning-bolt:nth-child(2) { top: 15%; right: 25%; animation-delay: 0.7s; transform: rotate(20deg); }
+        .lightning-bolt:nth-child(3) { top: 60%; left: 10%; animation-delay: 1.4s; transform: rotate(-30deg); height: 80px; }
+        .lightning-bolt:nth-child(4) { top: 55%; right: 15%; animation-delay: 0.3s; transform: rotate(25deg); height: 50px; }
+        .lightning-bolt:nth-child(5) { top: 30%; left: 50%; animation-delay: 1.1s; transform: rotate(5deg); height: 70px; }
+        @keyframes lightning {
+            0%, 90%, 100% { opacity: 0; transform: scaleY(0.5); }
+            45% { opacity: 1; transform: scaleY(1); }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900; margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 50%, var(--accent-light) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: 2px; animation: text-shimmer 3s ease-in-out infinite;
+        }
+        @keyframes text-shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+        .hero-tagline {
+            font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 2rem; font-weight: 300;
+            animation: fade-in-up 1s ease-out 0.5s both;
+        }
+        .hero-description {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem;
+            animation: fade-in-up 1s ease-out 0.8s both;
+        }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-buttons {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+            animation: fade-in-up 1s ease-out 1.1s both;
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 2rem; border-radius: 50px; font-weight: 600; font-size: 1rem;
+            text-decoration: none; transition: all 0.3s ease; cursor: pointer;
+            border: none; font-family: 'Inter', sans-serif;
+        }
+        .btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);
+    animation: btn-pulse 2s ease-in-out infinite;
+}
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3); }
+            50% { box-shadow: 0 4px 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.2); }
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(251, 191, 36, 0.5);
+        }
+        .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+        .btn-secondary:hover {
+            background: var(--primary); color: var(--text-primary);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Section Styles */
+        section { padding: 6rem 2rem; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 {
+            font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700; margin-bottom: 1rem;
+            display: inline-flex; align-items: center; gap: 0.75rem;
+        }
+        .section-header p { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* About Section */
+        .about { background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 50%, var(--bg-dark) 100%); }
+        .about-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;
+        }
+        .about-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 2rem; text-align: center; transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .about-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .about-card:hover::before { transform: scaleX(1); }
+        .about-card:hover {
+            transform: translateY(-8px); border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(168, 85, 247, 0.1);
+        }
+        .about-icon { font-size: 3rem; margin-bottom: 1rem; display: block; animation: icon-bounce 2s ease-in-out infinite; }
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .about-card h3 {
+            font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--accent);
+        }
+        .about-card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Roadmap Section */
+        .roadmap { background: var(--bg-dark); }
+        .roadmap-timeline {
+            position: relative; max-width: 900px; margin: 0 auto;
+        }
+        .roadmap-timeline::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--primary)); opacity: 0.3;
+        }
+        .roadmap-phase {
+            display: flex; align-items: flex-start; margin-bottom: 3rem; position: relative;
+        }
+        .roadmap-phase:nth-child(even) { flex-direction: row-reverse; }
+        .roadmap-content {
+            width: 45%; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 2rem; transition: all 0.4s ease;
+        }
+        .roadmap-content:hover {
+            border-color: var(--primary); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15);
+            transform: scale(1.02);
+        }
+        .roadmap-dot {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 20px; background: var(--accent); border-radius: 50%;
+            border: 4px solid var(--bg-dark); box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); z-index: 2;
+            animation: dot-pulse 2s ease-in-out infinite;
+        }
+        .roadmap-dot.completed {
+            background: #22c55e; box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+            animation: dot-pulse-green 2s ease-in-out infinite;
+        }
+        @keyframes dot-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 0 50px rgba(251, 191, 36, 0.3); }
+        }
+        @keyframes dot-pulse-green {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8), 0 0 50px rgba(34, 197, 94, 0.3); }
+        }
+        .roadmap-phase h3 {
+            font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 1rem;
+            color: var(--accent); display: flex; align-items: center; gap: 0.5rem;
+        }
+        .roadmap-list { list-style: none; }
+        .roadmap-list li {
+            padding: 0.5rem 0; color: var(--text-secondary);
+            display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem;
+        }
+        .roadmap-list li .check { color: #22c55e; font-weight: bold; min-width: 20px; }
+        .roadmap-list li .target { color: var(--accent); font-weight: bold; min-width: 20px; }
+
+        /* Why Join Section */
+        .why-join { background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(168, 85, 247, 0.05) 50%, var(--bg-dark) 100%); }
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;
+        }
+        .feature-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 2.5rem; transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .feature-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .feature-card:hover::after { transform: scaleX(1); }
+        .feature-card:hover {
+            transform: translateY(-8px); border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .feature-icon {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.75rem; margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            animation: icon-spin 6s ease-in-out infinite;
+        }
+        @keyframes icon-spin {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--text-primary);
+        }
+        .feature-card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Community Section */
+        .community { background: var(--bg-card); text-align: center; }
+        .community-cta {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid var(--border); border-radius: 24px;
+            padding: 3rem; max-width: 700px; margin: 0 auto;
+            animation: cta-glow 4s ease-in-out infinite alternate;
+        }
+        @keyframes cta-glow {
+            0% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.1); }
+            100% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.2), 0 0 80px rgba(251, 191, 36, 0.1); }
+        }
+        .community-cta h3 {
+            font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem;
+        }
+        .community-cta p { color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem; }
+        .social-links {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        }
+        .social-btn {
+            display: inline-flex; align-items: center; gap: 0.75rem;
+            padding: 1rem 2rem; border-radius: 50px; text-decoration: none;
+            font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent;
+        }
+        .social-btn.telegram {
+            background: #0088cc; color: white; box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
+            animation: social-float 3s ease-in-out infinite;
+        }
+        .social-btn.telegram:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 136, 204, 0.5);
+        }
+        .social-btn.twitter {
+            background: #000; color: white; border-color: #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: social-float 3s ease-in-out infinite 0.5s;
+        }
+        .social-btn.twitter:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); border-color: #666;
+        }
+        @keyframes social-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Disclaimer Section */
+        .disclaimer { background: var(--bg-dark); padding: 4rem 2rem; }
+        .disclaimer-box {
+            max-width: 800px; margin: 0 auto;
+            background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px; padding: 2.5rem; position: relative;
+            animation: disclaimer-pulse 4s ease-in-out infinite;
+        }
+        @keyframes disclaimer-pulse {
+            0%, 100% { border-color: rgba(239, 68, 68, 0.2); }
+            50% { border-color: rgba(239, 68, 68, 0.4); }
+        }
+        .disclaimer-box::before {
+            content: '⚠️'; font-size: 2rem; display: block; text-align: center; margin-bottom: 1rem;
+            animation: warning-shake 3s ease-in-out infinite;
+        }
+        @keyframes warning-shake {
+            0%, 90%, 100% { transform: rotate(0deg); }
+            92% { transform: rotate(-5deg); }
+            94% { transform: rotate(5deg); }
+            96% { transform: rotate(-5deg); }
+            98% { transform: rotate(5deg); }
+        }
+        .disclaimer-box h3 {
+            font-family: 'Orbitron', sans-serif; text-align: center; color: #ef4444;
+            margin-bottom: 1rem; font-size: 1.3rem;
+        }
+        .disclaimer-box p { color: var(--text-secondary); text-align: center; font-size: 0.95rem; line-height: 1.8; }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card); border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem; text-align: center;
+        }
+        .footer-logo {
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--accent); margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+            animation: footer-logo-bounce 3s ease-in-out infinite;
+        }
+        @keyframes footer-logo-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .footer-title {
+            font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem;
+        }
+        .footer-tagline { color: var(--text-secondary); margin-bottom: 2rem; font-size: 1rem; }
+        .footer-socials {
+            display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;
+        }
+        .footer-socials a {
+            width: 48px; height: 48px; border-radius: 50%; background: var(--bg-dark);
+            border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.25rem; transition: all 0.3s ease;
+        }
+        .footer-socials a:hover {
+            background: var(--primary); border-color: var(--primary);
+            transform: translateY(-3px) scale(1.1); box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3);
+        }
+        .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; margin-top: 2rem; }
+        .footer-bottom p { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Scroll Animation */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0;
+                background: var(--bg-dark); flex-direction: column; padding: 1rem 2rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding: 7rem 1.5rem 3rem; }
+            .hero-logo { width: 180px; height: 180px; }
+            .orbit-container { width: 260px; height: 260px; }
+            .orbit-coin { width: 24px; height: 24px; font-size: 12px; }
+            @keyframes orbit {
+                0% { transform: rotate(0deg) translateX(130px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(130px) rotate(-360deg); }
+            }
+            section { padding: 4rem 1.5rem; }
+            .roadmap-timeline::before { left: 20px; }
+            .roadmap-phase { flex-direction: column !important; padding-left: 50px; }
+            .roadmap-content { width: 100%; }
+            .roadmap-dot { left: 20px; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+        /* Snake decoration animation */
+        .snake-decoration {
+            position: fixed; bottom: -50px; right: -50px; width: 200px; height: 200px;
+            pointer-events: none; z-index: -1; opacity: 0.1;
+            animation: snake-slither 10s ease-in-out infinite;
+        }
+        @keyframes snake-slither {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-20px, -10px) rotate(5deg); }
+            50% { transform: translate(-10px, -20px) rotate(-5deg); }
+            75% { transform: translate(-30px, -5px) rotate(3deg); }
+        }
+    
+        /* =========================================
+           COMMUNITY VOTING & FEEDBACK
+           ========================================= */
+        .community-voting { padding: 100px 0; position: relative; }
+        .voting-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .voting-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 20px; padding: 35px; backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .voting-card:hover { transform: translateY(-5px); border-color: rgba(139, 92, 246, 0.6); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); }
+        .voting-icon { font-size: 42px; margin-bottom: 15px; }
+        .voting-card h3 { font-family: 'Orbitron', sans-serif; font-size: 22px; margin-bottom: 15px; }
+        .voting-question { font-size: 16px; margin-bottom: 25px; opacity: 0.85; }
+        .vote-options { display: flex; flex-direction: column; gap: 12px; }
+        .vote-option { width: 100%; display: flex; align-items: center; gap: 12px; padding: 15px 18px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #fff; cursor: pointer; font-size: 15px; text-align: left; transition: all 0.25s ease; }
+        .vote-option:hover { background: rgba(139, 92, 246, 0.18); border-color: rgba(139, 92, 246, 0.6); transform: translateX(4px); }
+        .vote-option.voted { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.6); }
+        .vote-message { margin-top: 20px; font-weight: 600; color: #a78bfa; }
+        .vote-note { margin-top: 18px; font-size: 13px; opacity: 0.6; }
+        .feedback-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+        .feedback-form input, .feedback-form textarea { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.05); color: #fff; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; }
+        .feedback-form input:focus, .feedback-form textarea:focus { border-color: rgba(139, 92, 246, 0.7); }
+        .feedback-form textarea { resize: vertical; }
+        .feedback-form input::placeholder, .feedback-form textarea::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .feedback-button { border: none; border-radius: 10px; padding: 14px 20px; background: linear-gradient(135deg, #8b5cf6, #06b6d4); color: white; font-weight: 700; cursor: pointer; transition: all 0.25s ease; }
+        .feedback-button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3); }
+        @media (max-width: 768px) { .voting-grid { grid-template-columns: 1fr; } .voting-card { padding: 25px; } }
+
+        /* Token Info & Live Stats */
+        .token-section, .stats-section, .buy-section, .security-section, .faq-section {
+            padding: 100px 0;
+            position: relative;
+        }
+        .token-grid, .stats-grid, .buy-grid, .security-grid, .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+        .token-card, .stat-card, .buy-card, .security-card, .faq-item, .chart-card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0,0,0,.12);
+        }
+        .token-card h3, .buy-card h3, .security-card h3, .faq-item h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 12px;
+        }
+        .token-list { display: grid; gap: 12px; margin-top: 20px; }
+        .token-row {
+            display:flex; justify-content:space-between; gap:20px; align-items:center;
+            padding:14px 16px; border-radius:12px; background:rgba(255,255,255,.035);
+            border:1px solid rgba(255,255,255,.08);
+        }
+        .token-row span:first-child { color: var(--text-muted); }
+        .token-value { font-weight:700; text-align:right; word-break:break-word; }
+        .ca-box { margin-top:18px; padding:16px; border-radius:14px; background:rgba(34,211,238,.06); border:1px solid rgba(34,211,238,.2); }
+        .ca-label { display:block; color:var(--text-muted); font-size:.8rem; margin-bottom:8px; }
+        .ca-line { display:flex; gap:10px; align-items:center; }
+        .ca-value { flex:1; font-family:monospace; font-size:.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .copy-btn { border:1px solid rgba(34,211,238,.35); background:rgba(34,211,238,.08); color:#fff; border-radius:9px; padding:9px 12px; cursor:pointer; }
+        .copy-btn:hover { background:rgba(34,211,238,.18); }
+        .stats-grid { grid-template-columns:repeat(4,1fr); max-width:1100px; }
+        .stat-card { text-align:center; padding:24px 16px; }
+        .stat-icon { font-size:28px; margin-bottom:8px; }
+        .stat-label { color:var(--text-muted); font-size:.85rem; }
+        .stat-value { font-family:'Orbitron',sans-serif; font-size:1.35rem; margin-top:6px; }
+        .stat-note { font-size:.75rem; color:var(--text-muted); margin-top:7px; }
+        .chart-card { max-width:1100px; margin:24px auto 0; min-height:280px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+        .chart-placeholder { width:100%; height:150px; border-radius:14px; border:1px dashed rgba(139,92,246,.35); background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(34,211,238,.04)); display:flex; align-items:center; justify-content:center; color:var(--text-muted); }
+        .coming-soon { display:inline-flex; align-items:center; gap:7px; margin-top:12px; padding:6px 10px; border-radius:999px; font-size:.75rem; background:rgba(139,92,246,.12); color:#c4b5fd; border:1px solid rgba(139,92,246,.25); }
+        .buy-grid { grid-template-columns:repeat(3,1fr); }
+        .buy-number { width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b5cf6,#06b6d4);font-weight:900;margin-bottom:16px; }
+        .buy-card p, .security-card p, .faq-item p { color:var(--text-muted); }
+        .action-links { display:flex; gap:12px; flex-wrap:wrap; margin-top:20px; }
+        .small-action { display:inline-block; text-decoration:none; padding:11px 15px; border-radius:10px; border:1px solid var(--border); color:#fff; background:rgba(255,255,255,.04); }
+        .small-action:hover { border-color:var(--accent); }
+        .security-grid { grid-template-columns:repeat(3,1fr); }
+        .security-icon { font-size:32px; margin-bottom:12px; }
+        .faq-grid { grid-template-columns:repeat(2,1fr); }
+        .faq-item { padding:24px; }
+        .faq-item h3 { font-size:17px; }
+        .placeholder-note { margin-top:20px; text-align:center; color:var(--text-muted); font-size:.9rem; }
+        @media (max-width: 900px) { .stats-grid { grid-template-columns:repeat(2,1fr); } .buy-grid,.security-grid { grid-template-columns:1fr; } }
+        @media (max-width: 768px) { .token-grid,.faq-grid { grid-template-columns:1fr; } .stats-grid { grid-template-columns:1fr 1fr; } .token-row { align-items:flex-start; flex-direction:column; gap:5px; } .token-value { text-align:left; } .ca-line { align-items:stretch; } }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="logo.png" alt="TKCP Logo">
+                <span class="logo-text">$TKCP</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#token">Token</a></li>
+                <li><a href="#stats">Live Stats</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#voting">Voting</a></li>
+                <li><a href="#buy">How to Buy</a></li>
+                <li><a href="#why-join">Why Join</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#disclaimer">Disclaimer</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-logo-wrapper">
+                <div class="lightning-bg">
+                    <div class="lightning-bolt"></div>
+                    <div class="lightning-bolt"></div>
+                    <div class="lightning-bolt"></div>
+                    <div class="lightning-bolt"></div>
+                    <div class="lightning-bolt"></div>
+                </div>
+                <div class="orbit-container">
+                    <div class="orbit-coin">$</div>
+                    <div class="orbit-coin">₿</div>
+                    <div class="orbit-coin">◈</div>
+                </div>
+                <img src="logo.png" alt="TKCP Logo" class="hero-logo">
+            </div>
+            <h1>The Kitty Community Pump</h1>
+            <p class="hero-tagline">Built by the Community. Powered by Memes. Driven by Unity.</p>
+            <p class="hero-description">
+                Welcome to TKCP, a community-powered meme coin where creativity, engagement, and internet culture come together. Join thousands of meme lovers building the future together.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://t.me/TKCPNews" target="_blank" class="btn btn-primary">
+                    <span>📢</span> Join Telegram
+                </a>
+                <a href="https://x.com/TKCP_Meme" target="_blank" class="btn btn-secondary">
+                    <span>🐦</span> Follow on X
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🌟 About TKCP</span></h2>
+                <p>The Kitty Community Pump is a community-driven meme coin created for entertainment, creativity, and community engagement.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card fade-in">
+                    <span class="about-icon">🐱</span>
+                    <h3>Fun & Welcoming</h3>
+                    <p>Build a fun and welcoming community where everyone feels at home.</p>
+                </div>
+                <div class="about-card fade-in">
+                    <span class="about-icon">🚀</span>
+                    <h3>Meme Culture</h3>
+                    <p>Create engaging meme culture that brings people together through laughter.</p>
+                </div>
+                <div class="about-card fade-in">
+                    <span class="about-icon">🌎</span>
+                    <h3>Global Connection</h3>
+                    <p>Connect supporters from around the world into one unified movement.</p>
+                </div>
+                <div class="about-card fade-in">
+                    <span class="about-icon">🤝</span>
+                    <h3>Empowerment</h3>
+                    <p>Empower community participation where every member has a voice.</p>
+                </div>
+                <div class="about-card fade-in">
+                    <span class="about-icon">🌕</span>
+                    <h3>United Growth</h3>
+                    <p>Grow together as one united movement shaped by the community itself.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Information Section -->
+    <section class="token-section" id="token">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">💎 $TKCP Token</span></h2>
+                <p>Token details are ready to be connected to the official contract when the CA is available.</p>
+            </div>
+            <div class="token-grid">
+                <div class="token-card fade-in">
+                    <h3>Token Information</h3>
+                    <div class="token-list">
+                        <div class="token-row"><span>Token Name</span><span class="token-value">The Kitty Community Pump</span></div>
+                        <div class="token-row"><span>Symbol</span><span class="token-value">$TKCP</span></div>
+                        <div class="token-row"><span>Blockchain</span><span class="token-value" id="chain-name">Coming Soon</span></div>
+                        <div class="token-row"><span>Total Supply</span><span class="token-value" id="total-supply">Coming Soon</span></div>
+                        <div class="token-row"><span>Decimals</span><span class="token-value" id="token-decimals">Coming Soon</span></div>
+                    </div>
+                </div>
+                <div class="token-card fade-in">
+                    <h3>Contract Address</h3>
+                    <p>Your official CA can be added here later. Until then, no contract address is displayed.</p>
+                    <div class="ca-box">
+                        <span class="ca-label">Official Contract Address</span>
+                        <div class="ca-line">
+                            <span class="ca-value" id="contract-address">COMING SOON</span>
+                            <button type="button" class="copy-btn" id="copy-ca" onclick="copyContractAddress()">Copy</button>
+                        </div>
+                    </div>
+                    <div class="action-links">
+                        <a href="#stats" class="small-action">📊 View Stats</a>
+                        <a href="#buy" class="small-action">🛒 How to Buy</a>
+                    </div>
+                </div>
+            </div>
+            <p class="placeholder-note">⚠️ Replace the placeholder values only after confirming the official token details.</p>
+        </div>
+    </section>
+
+    <!-- Live Statistics Section -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">📊 Live Token Statistics</span></h2>
+                <p>Live market data will appear here after the official token contract is connected.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card fade-in"><div class="stat-icon">💰</div><div class="stat-label">Price</div><div class="stat-value" id="stat-price">Coming Soon</div><div class="stat-note">Live data</div></div>
+                <div class="stat-card fade-in"><div class="stat-icon">📈</div><div class="stat-label">Market Cap</div><div class="stat-value" id="stat-market-cap">Coming Soon</div><div class="stat-note">Live data</div></div>
+                <div class="stat-card fade-in"><div class="stat-icon">💧</div><div class="stat-label">Liquidity</div><div class="stat-value" id="stat-liquidity">Coming Soon</div><div class="stat-note">Live data</div></div>
+                <div class="stat-card fade-in"><div class="stat-icon">👥</div><div class="stat-label">Holders</div><div class="stat-value" id="stat-holders">Coming Soon</div><div class="stat-note">Live data</div></div>
+            </div>
+            <div class="chart-card fade-in">
+                <h3>📈 $TKCP Price Chart</h3>
+                <div class="chart-placeholder">Live chart will be connected after the token CA and chain are confirmed.</div>
+                <span class="coming-soon">🔌 Live connection pending</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap" id="roadmap">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🚀 Roadmap</span></h2>
+                <p>Our journey to build the future of TKCP, one phase at a time.</p>
+            </div>
+            <div class="roadmap-timeline">
+                <div class="roadmap-phase fade-in">
+                    <div class="roadmap-content">
+                        <h3>🐱 Phase 1: Launch & Foundation</h3>
+                        <ul class="roadmap-list">
+                            <li><span class="check">✅</span> Launch TKCP Token</li>
+                            <li><span class="check">✅</span> Official Website Release</li>
+                            <li><span class="check">✅</span> Telegram & X Community Setup</li>
+                            <li><span class="check">✅</span> Early Supporter Campaign</li>
+                            <li><span class="check">✅</span> Community Transparency & Regular Updates</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-dot completed"></div>
+                </div>
+                <div class="roadmap-phase fade-in">
+                    <div class="roadmap-content">
+                        <h3>🌟 Phase 2: Community Growth</h3>
+                        <ul class="roadmap-list">
+                            <li><span class="target">🎯</span> Reach 1,000+ Community Members</li>
+                            <li><span class="target">🎯</span> Community-Driven Marketing Campaigns</li>
+                            <li><span class="target">🎯</span> Weekly Events, Contests & Giveaways</li>
+                            <li><span class="target">🎯</span> Expand Social Media Presence</li>
+                            <li><span class="target">🎯</span> Introduce Community Polls & Voting</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-dot"></div>
+                </div>
+                <div class="roadmap-phase fade-in">
+                    <div class="roadmap-content">
+                        <h3>🔥 Phase 3: Expansion</h3>
+                        <ul class="roadmap-list">
+                            <li><span class="target">🎯</span> Reach 5,000+ Holders</li>
+                            <li><span class="target">🎯</span> Community Ambassador Program</li>
+                            <li><span class="target">🎯</span> Partnerships with Creators & Communities</li>
+                            <li><span class="target">🎯</span> Community-Generated Content Campaigns</li>
+                            <li><span class="target">🎯</span> Increase Brand Awareness Across Platforms</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-dot"></div>
+                </div>
+                <div class="roadmap-phase fade-in">
+                    <div class="roadmap-content">
+                        <h3>💎 Phase 4: Ecosystem Development</h3>
+                        <ul class="roadmap-list">
+                            <li><span class="target">🎯</span> Reach 10,000+ Holders</li>
+                            <li><span class="target">🎯</span> Community Rewards Initiatives</li>
+                            <li><span class="target">🎯</span> Governance Voting for Future Proposals</li>
+                            <li><span class="target">🎯</span> Community Utility & Ecosystem Initiatives</li>
+                            <li><span class="target">🎯</span> Merchandise & Branding Expansion</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-dot"></div>
+                </div>
+                <div class="roadmap-phase fade-in">
+                    <div class="roadmap-content">
+                        <h3>🌕 Phase 5: The Future</h3>
+                        <ul class="roadmap-list">
+                            <li><span class="target">🎯</span> Global Community Growth</li>
+                            <li><span class="target">🎯</span> Strategic Partnerships</li>
+                            <li><span class="target">🎯</span> Community-Led Ecosystem Development</li>
+                            <li><span class="target">🎯</span> Charity & Social Impact Initiatives</li>
+                            <li><span class="target">🎯</span> Long-Term Sustainability Powered by the Community</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Voting & Feedback Section -->
+    <section class="community-voting" id="voting">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🗳️ Community Voting & Feedback</span></h2>
+                <p>Your voice matters. Help shape the future of TKCP.</p>
+            </div>
+
+            <div class="voting-grid">
+                <div class="voting-card fade-in">
+                    <div class="voting-icon">🗳️</div>
+                    <h3>Community Vote</h3>
+                    <p class="voting-question">What should TKCP focus on next?</p>
+                    <div class="vote-options">
+                        <button type="button" class="vote-option" onclick="castVote(this, 'Community Growth')">
+                            <span>🚀</span><span>Community Growth</span>
+                        </button>
+                        <button type="button" class="vote-option" onclick="castVote(this, 'Marketing & Promotion')">
+                            <span>📣</span><span>Marketing & Promotion</span>
+                        </button>
+                        <button type="button" class="vote-option" onclick="castVote(this, 'Community Events')">
+                            <span>🎉</span><span>Community Events</span>
+                        </button>
+                        <button type="button" class="vote-option" onclick="castVote(this, 'Ecosystem Development')">
+                            <span>💎</span><span>Ecosystem Development</span>
+                        </button>
+                    </div>
+                    <p id="vote-message" class="vote-message"></p>
+                    <div class="vote-note">💡 One vote per browser.</div>
+                </div>
+
+                <div class="voting-card feedback-card fade-in">
+                    <div class="voting-icon">💡</div>
+                    <h3>Send Us Your Feedback</h3>
+                    <p>Have an idea, suggestion, or something you'd like to see improved? Let the TKCP community know.</p>
+                    <form class="feedback-form" action="https://formsubmit.co/YOUR-EMAIL-HERE" method="POST">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="5" placeholder="Write your feedback or suggestion..." required></textarea>
+                        <input type="hidden" name="_subject" value="TKCP Community Feedback">
+                        <input type="hidden" name="_captcha" value="false">
+                        <button type="submit" class="feedback-button">💌 Send Feedback</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Join Section -->
+    <section class="why-join" id="why-join">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">💪 Why Join TKCP?</span></h2>
+                <p>Discover what makes our community special and why you should be part of it.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">💪</div>
+                    <h3>Strong Community</h3>
+                    <p>A project built around people, participation, and collaboration. Every voice matters.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">😂</div>
+                    <h3>Meme-Powered Culture</h3>
+                    <p>Fun, creativity, and viral internet culture are at the heart of everything we do.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🗳️</div>
+                    <h3>Community Governance</h3>
+                    <p>Community feedback and voting help shape future decisions and project direction.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Reach</h3>
+                    <p>A growing network of supporters from around the world, united by memes.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔮</div>
+                    <h3>Long-Term Vision</h3>
+                    <p>Focused on sustainable community growth and engagement for the long haul.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section class="buy-section" id="buy">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🛒 How to Buy $TKCP</span></h2>
+                <p>A simple guide for new community members. Final links can be added after the official token launch details are confirmed.</p>
+            </div>
+            <div class="buy-grid">
+                <div class="buy-card fade-in"><div class="buy-number">1</div><h3>Get a Wallet</h3><p>Use a compatible crypto wallet for the blockchain where $TKCP is launched.</p></div>
+                <div class="buy-card fade-in"><div class="buy-number">2</div><h3>Get the Network Token</h3><p>Fund your wallet with the network's native token for purchases and transaction fees.</p></div>
+                <div class="buy-card fade-in"><div class="buy-number">3</div><h3>Connect & Swap</h3><p>Use the official trading route once it is published. Always verify the contract address before swapping.</p></div>
+            </div>
+            <p class="placeholder-note">🔒 Official buy links and the verified CA will be added here once available.</p>
+        </div>
+    </section>
+
+    <!-- Security & Transparency Section -->
+    <section class="security-section" id="security">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">🔐 Security & Transparency</span></h2>
+                <p>Important information should always be verified before interacting with a token.</p>
+            </div>
+            <div class="security-grid">
+                <div class="security-card fade-in"><div class="security-icon">🔎</div><h3>Verify the CA</h3><p>Always compare the contract address shown here with the official project channels before making a transaction.</p></div>
+                <div class="security-card fade-in"><div class="security-icon">🧾</div><h3>Transparent Information</h3><p>Token supply, chain, liquidity and holder information will be displayed here when verified data is available.</p></div>
+                <div class="security-card fade-in"><div class="security-icon">⚠️</div><h3>Do Your Own Research</h3><p>Never rely on promises of guaranteed returns. Cryptocurrency participation carries financial risk.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">❓ Frequently Asked Questions</span></h2>
+                <p>Quick answers for new and existing TKCP community members.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item fade-in"><h3>What is TKCP?</h3><p>TKCP, The Kitty Community Pump, is a community-driven meme coin focused on entertainment, creativity and community participation.</p></div>
+                <div class="faq-item fade-in"><h3>Where is the contract address?</h3><p>The official CA has not been added to this version of the site yet. It will be displayed here once confirmed.</p></div>
+                <div class="faq-item fade-in"><h3>Will the website show live statistics?</h3><p>Yes. Once the blockchain and official CA are confirmed, the live price, market cap, liquidity and holder data can be connected.</p></div>
+                <div class="faq-item fade-in"><h3>How can I join the community?</h3><p>Use the official Telegram and X links on this website and verify that you are following the project's official channels.</p></div>
+                <div class="faq-item fade-in"><h3>How does community voting work?</h3><p>The current demo vote stores a vote in the visitor's browser. A future backend can be connected for global community voting.</p></div>
+                <div class="faq-item fade-in"><h3>Is TKCP an investment?</h3><p>No statement on this website should be interpreted as financial or investment advice. Crypto assets can be highly risky and volatile.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="community" id="community">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2><span class="gradient-text">📢 Community First</span></h2>
+                <p>The success of TKCP depends on the strength of its community.</p>
+            </div>
+            <div class="community-cta fade-in">
+                <h3>🌕 Join The Movement</h3>
+                <p>Together we create memes. Together we grow. Together we build the future of TKCP.</p>
+                <div class="social-links">
+                    <a href="https://t.me/TKCPNews" target="_blank" class="social-btn telegram">
+                        <span>📢</span> Join Telegram
+                    </a>
+                    <a href="https://x.com/TKCP_Meme" target="_blank" class="social-btn twitter">
+                        <span>🐦</span> Follow on X
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section class="disclaimer" id="disclaimer">
+        <div class="container">
+            <div class="disclaimer-box fade-in">
+                <h3>Disclaimer</h3>
+                <p>
+                    The Kitty Community Pump (TKCP) is a community-driven meme coin created for entertainment, creativity, and community engagement. TKCP does not guarantee profits, returns, financial gains, or investment outcomes. Participation involves risk, and users should always conduct their own research before engaging with any cryptocurrency-related project. Nothing on this website should be considered financial, legal, or investment advice.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <img src="logo.png" alt="TKCP Logo" class="footer-logo">
+            <h3 class="footer-title">$TKCP</h3>
+            <p class="footer-tagline">Built by the Community • Powered by Memes • Driven by Unity 🚀🌕</p>
+            <div class="footer-socials">
+                <a href="https://t.me/TKCPNews" target="_blank" title="Telegram">📢</a>
+                <a href="https://x.com/TKCP_Meme" target="_blank" title="X (Twitter)">🐦</a>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 The Kitty Community Pump (TKCP). All rights reserved. Community-driven meme coin.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Scroll Animation Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Generate floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            const size = 2 + Math.random() * 4;
+            particle.style.width = size + 'px'; particle.style.height = size + 'px';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Community Voting
+        function castVote(button, option) {
+            const voteMessage = document.getElementById('vote-message');
+            const savedVote = localStorage.getItem('tkcp_has_voted');
+
+            if (savedVote) {
+                voteMessage.textContent = '✅ You have already voted. Thank you for participating!';
+                return;
+            }
+
+            localStorage.setItem('tkcp_has_voted', option);
+            localStorage.setItem('tkcp_has_voted_time', new Date().toISOString());
+
+            document.querySelectorAll('.vote-option').forEach(function(btn) {
+                btn.classList.remove('voted');
+            });
+
+            button.classList.add('voted');
+            voteMessage.textContent = '✅ Thank you! Your vote for "' + option + '" has been recorded.';
+        }
+
+
+        // Token configuration — add the official values here later.
+        const TKCP_CONFIG = {
+            contractAddress: '',
+            chain: '',
+            totalSupply: '',
+            decimals: ''
+        };
+
+        function copyContractAddress() {
+            const address = TKCP_CONFIG.contractAddress.trim();
+            const button = document.getElementById('copy-ca');
+            if (!address) {
+                button.textContent = 'Not Added';
+                setTimeout(() => button.textContent = 'Copy', 1800);
+                return;
+            }
+            navigator.clipboard.writeText(address).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => button.textContent = 'Copy', 1800);
+            }).catch(() => {
+                button.textContent = 'Copy Failed';
+                setTimeout(() => button.textContent = 'Copy', 1800);
+            });
+        }
+
+        function applyTokenConfig() {
+            if (TKCP_CONFIG.contractAddress) {
+                document.getElementById('contract-address').textContent = TKCP_CONFIG.contractAddress;
+            }
+            if (TKCP_CONFIG.chain) document.getElementById('chain-name').textContent = TKCP_CONFIG.chain;
+            if (TKCP_CONFIG.totalSupply) document.getElementById('total-supply').textContent = TKCP_CONFIG.totalSupply;
+            if (TKCP_CONFIG.decimals) document.getElementById('token-decimals').textContent = TKCP_CONFIG.decimals;
+        }
+        applyTokenConfig();
+
+    </script>
+</body>
+</html>
