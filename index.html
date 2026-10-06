@@ -1122,6 +1122,30 @@ background:
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
+    /* =========================================
+   COMMUNITY VOTING
+   ========================================= */
+
+function castVote(button, option) {
+
+    if (localStorage.getItem('tkcp_has_voted')) {
+        document.getElementById('vote-message').textContent =
+            '✅ You have already voted. Thank you for participating!';
+        return;
+    }
+
+    localStorage.setItem('tkcp_has_voted', option);
+    localStorage.setItem('tkcp_has_voted_time', new Date().toISOString());
+
+    document.querySelectorAll('.vote-option').forEach(function(btn) {
+        btn.classList.remove('voted');
+    });
+
+    button.classList.add('voted');
+
+    document.getElementById('vote-message').textContent =
+        '✅ Thank you! Your vote for "' + option + '" has been recorded.';
+}
     </script>
 </body>
 </html>
